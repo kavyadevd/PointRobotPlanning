@@ -15,3 +15,7 @@ Generate map using the given dimensions
 pygame.draw.circle(surface, color, center, radius) 
 pygame.draw.polygon(surface, color, points)
 ~~~~
+
+### Find possible moves for each step
+![PossibleMoves](https://user-images.githubusercontent.com/13993518/156101896-ff6c9c3d-aa50-43a5-a714-ca455f7346bc.png)
+
