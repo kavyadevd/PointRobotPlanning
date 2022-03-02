@@ -7,8 +7,8 @@ To create map and animate the robot motion here, *pygame* is used
 ```
 pip install pygame
 ```
-Generate map using the given dimensions
-![image](https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png)
+
+[<img src="https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png" width="500" aligh="center"/>](https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png)
 
 > Pygame syntax to generate circle and polygon are as follows:
 ~~~~
@@ -17,5 +17,11 @@ pygame.draw.polygon(surface, color, points)
 ~~~~
 
 ### Find possible moves for each step
-![PossibleMoves](https://user-images.githubusercontent.com/13993518/156101896-ff6c9c3d-aa50-43a5-a714-ca455f7346bc.png)
+![<img src="https://user-images.githubusercontent.com/13993518/156101896-ff6c9c3d-aa50-43a5-a714-ca455f7346bc.png" width="250"/>](https://user-images.githubusercontent.com/13993518/156101896-ff6c9c3d-aa50-43a5-a714-ca455f7346bc.png)
+<sup size="0.5">Figure 1: Possible moves</sup>
+
+
+#### Weight for each action is as follows:
+<img src="https://user-images.githubusercontent.com/13993518/156457885-275d718e-0ae2-457e-89c3-6ca22c3ab387.png" width="400"/>
+<sup size="0.5">Figure 2: Weight of each action</sup>
 
