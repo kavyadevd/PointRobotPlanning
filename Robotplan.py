@@ -1,16 +1,10 @@
-from Obstacle import Obstacle
-
 class RobotPlan:
-    def __init__(self, clearance, point, screen_height, screen_width,startpoint, endpoint) -> None:
-        self.height = screen_height
-        self.width = screen_width
+    def __init__(self, clearance, point) -> None:
         self.clearance = clearance
         self.robot_pos = point
-        self.startpoint = startpoint
-        self.endpoint = endpoint
     
     # Refer Possible Moves diagram in ReadMe
-    def GetActions(self, obstacle, last_action):
+    def GetActions(self, obstacle, last_action):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
         moves = []        
         if last_action !='D' and obstacle.ValidateAll([self.robot_pos[0],self.robot_pos[1]+1]):
             moves.append('U')
@@ -28,3 +22,22 @@ class RobotPlan:
             moves.append('L')
         if last_action !='DR' and obstacle.ValidateAll([self.robot_pos[0]-1,self.robot_pos[1]+1]):
             moves.append('UL')
+        return moves
+
+    def GetNewCoordinates(self,action):
+        if action == 'U':
+            return [0,1] # increment y by 1
+        if action == 'UR':
+            return [1.4,1.4] # increment x,y by 1.4
+        elif action == 'R':
+            return [1,0] # increment x by 1
+        elif action == 'DR':
+            return [1.4,-1.4]
+        elif action == 'D':
+            return [0,-1] # decrement y by 1
+        elif action == 'DL':
+            return [-1.4,-1.4]
+        elif action == 'L':
+            return [-1,0] # decrement x by 1
+        elif action == 'UL':
+            return [-1.4,1.4]
