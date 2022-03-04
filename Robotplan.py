@@ -5,7 +5,9 @@ class RobotPlan:
     
     # Refer Possible Moves diagram in ReadMe
     def GetActions(self, obstacle, last_action):                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-        moves = []        
+        moves = []
+        if not last_action:
+            last_action = 'Z'
         if last_action !='D' and obstacle.ValidateAll([self.robot_pos[0],self.robot_pos[1]+1]):
             moves.append('U')
         if last_action !='DL' and obstacle.ValidateAll([self.robot_pos[0]+1,self.robot_pos[1]+1]):
@@ -28,16 +30,16 @@ class RobotPlan:
         if action == 'U':
             return [0,1] # increment y by 1
         if action == 'UR':
-            return [1.4,1.4] # increment x,y by 1.4
+            return [1,1] # increment x,y by 1
         elif action == 'R':
             return [1,0] # increment x by 1
         elif action == 'DR':
-            return [1.4,-1.4]
+            return [1,-1]
         elif action == 'D':
             return [0,-1] # decrement y by 1
         elif action == 'DL':
-            return [-1.4,-1.4]
+            return [-1,-1]
         elif action == 'L':
             return [-1,0] # decrement x by 1
         elif action == 'UL':
-            return [-1.4,1.4]
+            return [-1,1]
