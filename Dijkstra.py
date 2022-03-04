@@ -2,6 +2,8 @@ import imp
 import pygame
 import numpy as np
 from Obstacle import Obstacle
+from Obstacle import Game
+from Robotplan import RobotPlan
 
 # define variables
 bot_clearance = 5
@@ -19,9 +21,22 @@ screen.fill(white)
 polygon1_points = [[115, 210], [80, 180], [105, 100], [36, 185]]
 
 # Get and validate user input
-start_pos = [68, 178]
-goal_pos = [335, 185]
-
+print('Input start position')
+start_pos = []
+temp = input('x:')
+start_pos.append(int(temp))
+temp = input('y:')
+start_pos.append(int(temp))
+if not start_pos:
+    start_pos = [68, 178]
+print('Input goal position')
+goal_pos = []
+temp = input('x:')
+goal_pos.append(int(temp))
+temp = input('y:')
+goal_pos.append(int(temp))
+if not goal_pos:
+    goal_pos = [335, 185]
 
 def draw_map():
     pygame.init()
@@ -33,11 +48,6 @@ def draw_map():
     pygame.display.flip()
 
 
-def StartDijkstra():
-    draw_map()
-    pygame.time.wait(5000)
-
-
 # Create Obstacles
 obstacles_ = Obstacle(bot_clearance, start_pos, height, width,polygon1_points)
 obstacles_.AddObstacle("circle", [[300, 185], [40]])
@@ -45,7 +55,31 @@ obstacles_.AddObstacle(
     "polygon", [[115, 210], [75, 180], [105, 100], [36, 186]])
 obstacles_.AddObstacle("hexagon", [])
 flag = obstacles_.ValidateAll(start_pos)
+
+
+def StartGame(start_pos,goal_pos,bot_clearance):
+    global obstacles_
+    game_ = Game(start_pos, goal_pos, bot_clearance, obstacles_)
+    path, points = game_.Start()
+
+    #fig1 = plot.figure(figsize=(40, 15))
+    #plot.subplot(121)
+    #plot.xlabel('Age')
+    #plot.ylabel('Cost')
+    #age,cost = zip(*points)
+    #plot.scatter(age, cost, c="pink")
+    draw_map()
+    #plot.show()
+    pygame.time.wait(5000)
+
+
 if flag:
-    flag = obstacles_.ValidateAll(goal_pos, obstacles_)
+    flag = obstacles_.ValidateAll(goal_pos)
 if flag:
-    StartDijkstra()
+    StartGame(start_pos,goal_pos,bot_clearance)
+    pygame.quit()
+    exit()
+
+
+
+
