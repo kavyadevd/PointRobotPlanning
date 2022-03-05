@@ -25,3 +25,7 @@ pygame.draw.polygon(surface, color, points)
 <img src="https://user-images.githubusercontent.com/13993518/156457885-275d718e-0ae2-457e-89c3-6ca22c3ab387.png" width="400"/>
 <sup size="0.5">Figure 2: Weight of each action</sup>
 
+
+#### References
+1. [Clearance offset calculation](https://stackoverflow.com/a/32773111/5155957)
+2. [Calculate intersection of two lines](https://stackoverflow.com/a/20679579/5155957)
