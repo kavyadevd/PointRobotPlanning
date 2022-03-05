@@ -1,4 +1,3 @@
-import matplotlib.path as mplPath
 from Node import Node
 from Robotplan import RobotPlan
 import math
@@ -204,7 +203,7 @@ class Obstacle:
     def InsideCircle(self, point) -> bool:
         # (x-x1)^2 + (y-y1)^2 <= (r+clearance)^2
         center = self.circle_center
-        radius = self.circle_radius + self.clearance
+        radius = self.circle_radius #+ self.clearance
         flag = ((point[0]-center[0])**2 + (point[1]-center[1])
                 ** 2 <= (radius+self.clearance)**2)
         return flag
