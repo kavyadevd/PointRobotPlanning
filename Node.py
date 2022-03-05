@@ -12,4 +12,13 @@ class Node:
             self.cost = (1) if  moves and (len(moves) == 1) else (1.4)
         if not moves:
             self.cost = 0
-        self.moves = moves     
+        self.moves = moves    
+
+    def GetBacktrack(self):
+        moves_= []
+        # Backtrack
+        node = self
+        while node:
+            moves_.append(node)
+            node = node.parent
+        yield from reversed(moves_)
