@@ -4,6 +4,51 @@ from Robotplan import RobotPlan
 import math
 
 
+class Game:
+    def __init__(self, start, goal, clearance, obstacle) -> None:
+        self.start = start
+        self.clearance = clearance
+        self.goal = goal
+        self.obstacle = obstacle
+
+    def Start(self):
+        point = []
+        Current = Node(self.start, 0, None, None)
+        Visted = [Current]
+        AllNodes = {tuple(Current.gameparams)}
+        distance = 500
+        count = 1
+        while (distance >= 1):
+            if len(Visted) != 0:
+                print('Computing', '.'*count)
+                Current = Visted.pop()
+                point.append(Current.gameparams)
+                R = RobotPlan(self.clearance, Current.gameparams)
+                moves = R.GetActions(self.obstacle, Current.moves)
+                #print(moves)
+                for e in moves:
+                    xy = R.GetNewCoordinates(e)
+                    xy = [(Current.gameparams[0]+xy[0]),
+                          (Current.gameparams[1]+xy[1])]
+                    #print('Current: ', (Current.gameparams[0]), ',', Current.gameparams[1], 'Action: ', e, ' : ', xy)
+                    NextNode = Node(xy, 0, Current, e)
+                    if tuple(xy) not in AllNodes:
+                        Visted.append(NextNode)
+                        AllNodes.add(tuple(xy))
+                Visted.sort(key=lambda w: w.cost, reverse=True)
+            else:
+                return -1, Current.GetBacktrack(), point
+            distance = (math.sqrt(
+                ((Current.gameparams[0]-self.goal[0])**2) + ((Current.gameparams[1]-self.goal[1])**2)))
+            count = (count+1) if count < 5 else 1
+        points_ = Current.GetBacktrack()
+        print('Dijkstra Completed')
+        path = []
+        for e in points_:
+            path.append(e.gameparams)
+        print('Point Robot path is :\n',path)
+        return path, point
+
 
 class Obstacle:
     def __init__(self, clearance, point, screen_height, screen_width, polygon1_shape, hexagon) -> None:
