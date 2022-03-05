@@ -3,22 +3,27 @@ import numpy as np
 from Obstacle import Obstacle
 from Obstacle import Game
 import matplotlib.pyplot as plot
-from matplotlib import animation
+from pygame.locals import *
+import cv2
 
 # define variables
 bot_clearance = 5
 
 # create pygame environment
 screen_size = width, height = 400, 250
+image = np.zeros((height, width, 3), np.uint8)
+image.fill(255)
 #screen = pygame.display.set_mode(screen_size)
 black = [0, 0, 0]
 white = [255, 255, 255]
-red = [255,0,0]
-blue = [0,0,255]
-#screen.fill(white)
+poly_color = [195,89,143]
+blue = [0, 0, 255]
+border_c = [64, 106, 151]
+# screen.fill(white)
 
 polygon1_points = [[115, 210], [80, 180], [105, 100], [36, 185]]
-polygon2_points = [[200, 140], [235,120], [235,80], [200,60],[165,80],[165,120]]
+polygon2_points = [[200, 140], [235, 120], [
+    235, 80], [200, 60], [165, 80], [165, 120]]
 
 # Get and validate user input
 print('Input start position')
@@ -38,108 +43,97 @@ goal_pos.append(int(temp))
 if not goal_pos:
     goal_pos = [335, 185]
 
-fig1, axes = plot.subplots()
+# fig1, axes = plot.subplots()
 
-def PlotPath(path):
-    xs, ys = zip(*path)
-    plot.plot(xs,ys)
 
-def DrawMap(points):
-    # plot.subplots(121)
-    plot.ylim([0, 250])
-    plot.xlim([0, 400])
-
-    #Polygon 1
-    poly = polygon1_points
-    poly.append(poly[0])
-    xs, ys = zip(*poly)
-    plot.plot(xs,ys)
-    plot.fill(xs, ys, "c")
+def DrawMap(points, path):
+    global image
+    image = cv2.flip(image, 0)
+    image = cv2.flip(image, 1)
+    nppolygon1_points = np.array(polygon1_points,np.int32)
+    nppolygon1_points = nppolygon1_points.reshape(-1,1,2)
+    image = cv2.fillPoly(image, [nppolygon1_points], poly_color)
 
     # Plot start goal points
-    plot.text(start_pos[0],start_pos[1],'Start')
-    plot.text(goal_pos[0],goal_pos[1],'Goal')
-    plot.plot(start_pos[0],start_pos[1], 'ro')
-    plot.plot(goal_pos[0],goal_pos[1], 'ro')
+    image[start_pos[0], start_pos[1]] = [0, 0, 255]
 
-    #Circle
-    Drawing_colored_circle = plot.Circle(( 300 , 185 ), 40 )
-    axes.add_artist( Drawing_colored_circle ) 
+    cv2.putText(image, 'Start', (start_pos[0], start_pos[1]),
+                 cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 255, 0), 1, cv2.LINE_AA)
+    image[goal_pos[0], goal_pos[1]] = [0, 0, 255]
+    cv2.putText(image, 'Goal', (goal_pos[0], goal_pos[1]),
+                 cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 255, 0), 1, cv2.LINE_AA)
 
-    #Hexagon
-    poly = polygon2_points
-    poly.append(poly[0])
-    xs, ys = zip(*poly)
-    plot.plot(xs,ys)
-    plot.fill(xs, ys, "c")
+    # Circle
+    image = cv2.circle(image, (300, 185), 40, poly_color, -1)
+
+    # Hexagon
+    nppolygon1_points = np.array(polygon2_points,np.int32)
+    image = cv2.fillPoly(image, [nppolygon1_points], poly_color)
 
     # Clearance
-    poly = poly1_offset
-    xs, ys = zip(*poly)
-    plot.plot(xs,ys)
+    nppolygon1_points = np.array(poly1_offset,np.int32)
+    image = cv2.polylines(image, [nppolygon1_points], True, border_c, 1)
 
-    poly = hexa_offset
-    xs, ys = zip(*poly)
-    plot.plot(xs,ys)
+    nppolygon1_points = np.array(hexa_offset,np.int32)
+    image = cv2.polylines(image, [nppolygon1_points], True, border_c, 1)
 
 
-    circle_border = plot.Circle((300, 185), 45, color='r')
-    axes.add_patch(circle_border)
+    image = cv2.circle(image, (300, 185), 45, border_c, 1)
 
     # Animate Dijkstra space
-    poly = polygon2_points
-    poly.append(poly[0])
-    xs, ys = zip(*poly)
-    global dataSet
-    plot.plot(xs,ys)
-    plot.fill(xs, ys, "c")
+    # Plot point space : EXPLORED
+    image_ =image
+    for vis in points:
+        image_[int(vis[1]), int(vis[0]), :] = [121,166,77]
+        img = image_.copy()
+        img = cv2.flip(image, -1)
+        img = cv2.flip(image, 0)
+        cv2.imshow("Moving", img)
+        cv2.waitKey(1)
+    cv2.waitKey(0)
 
-    xs = [p[0] for p in points]
-    ys = [p[1] for p in points]
-
-    dataSet = np.array([xs, ys])
+    # Plot PATH
+    for p in path:
+        image = cv2.circle(image, (int(p[0]), int(p[1])), 2, blue, 1)
     
-    line_ani = animation.FuncAnimation(fig1, animate_func, interval=1,   
-                                   frames=len(points)//20)
-    #line_ani.save('points.gif', writer='abc', fps=30)
-    plot.show()
-    line_ani.save('animation.gif', writer='PillowWriter', fps=30)
 
-def animate_func(num):
-    axes.plot(dataSet[0, :num+1], dataSet[1, :num+1])
-    axes.scatter(dataSet[0, num], dataSet[1, num], marker='o')
 
 # Create Obstacles
-obstacles_ = Obstacle(bot_clearance, start_pos, height, width,polygon1_points, polygon2_points)
+obstacles_ = Obstacle(bot_clearance, start_pos, height,
+                      width, polygon1_points, polygon2_points)
 obstacles_.AddObstacle("circle", [[300, 185], [40]])
 obstacles_.AddObstacle("polygon", polygon1_points)
 obstacles_.AddObstacle("hexagon", polygon2_points)
 flag = obstacles_.ValidateAll(start_pos)
 
 
-def StartGame(start_pos,goal_pos,bot_clearance):
+def StartGame(start_pos, goal_pos, bot_clearance):
     global obstacles_
     game_ = Game(start_pos, goal_pos, bot_clearance, obstacles_)
     path, points = game_.Start()
-    DrawMap(points)
-    PlotPath(path)
+    DrawMap(points, path)
     plot.show()
-    #pygame.time.wait(5000)
+    # pygame.time.wait(5000)
 
 
 if flag:
     flag = obstacles_.ValidateAll(goal_pos)
+else:
+    print('Invalid start position')
 if flag:
     global poly1_offset
     poly1_offset = obstacles_.polygon_with_border
     global hexa_offset
     hexa_offset = obstacles_.hexagon_with_border
-    StartGame(start_pos,goal_pos,bot_clearance)
-    #pygame.quit()
+    StartGame(start_pos, goal_pos, bot_clearance)
+    image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    image = cv2.flip(image, -1)
+    image = cv2.flip(image, 0)
+    cv2.imshow('Path', image)
+    cv2.waitKey(0)
+    cv2.imwrite("Output.png", image)
+    # pygame.quit()
     exit()
-
-
-
-
-
-
+else:
+    print('Invalid goal position')
