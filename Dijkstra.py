@@ -1,24 +1,24 @@
-import imp
-import pygame
+#import pygame
 import numpy as np
 from Obstacle import Obstacle
 from Obstacle import Game
-from Robotplan import RobotPlan
+import matplotlib.pyplot as plot
+from matplotlib import animation
 
 # define variables
 bot_clearance = 5
 
-# scaling factor for better visualization
-zoom_ = 1
-
 # create pygame environment
-screen_size = width, height = 400*zoom_, 250*zoom_
-screen = pygame.display.set_mode(screen_size)
+screen_size = width, height = 400, 250
+#screen = pygame.display.set_mode(screen_size)
 black = [0, 0, 0]
 white = [255, 255, 255]
-screen.fill(white)
+red = [255,0,0]
+blue = [0,0,255]
+#screen.fill(white)
 
 polygon1_points = [[115, 210], [80, 180], [105, 100], [36, 185]]
+polygon2_points = [[200, 140], [235,120], [235,80], [200,60],[165,80],[165,120]]
 
 # Get and validate user input
 print('Input start position')
@@ -38,22 +38,13 @@ goal_pos.append(int(temp))
 if not goal_pos:
     goal_pos = [335, 185]
 
-def draw_map():
-    pygame.init()
-    # circle(surface, color, center, radius)
-    pygame.draw.circle(screen, black, (300, (250-185)), 40)
-    # polygon(surface, color, points)
-    pygame.draw.polygon(screen, black, polygon1_points, True)
-    # Hexagon02
-    pygame.display.flip()
-
+fig1, axes = plot.subplots()
 
 # Create Obstacles
-obstacles_ = Obstacle(bot_clearance, start_pos, height, width,polygon1_points)
+obstacles_ = Obstacle(bot_clearance, start_pos, height, width,polygon1_points, polygon2_points)
 obstacles_.AddObstacle("circle", [[300, 185], [40]])
-obstacles_.AddObstacle(
-    "polygon", [[115, 210], [75, 180], [105, 100], [36, 186]])
-obstacles_.AddObstacle("hexagon", [])
+obstacles_.AddObstacle("polygon", polygon1_points)
+obstacles_.AddObstacle("hexagon", polygon2_points)
 flag = obstacles_.ValidateAll(start_pos)
 
 
@@ -61,24 +52,23 @@ def StartGame(start_pos,goal_pos,bot_clearance):
     global obstacles_
     game_ = Game(start_pos, goal_pos, bot_clearance, obstacles_)
     path, points = game_.Start()
-
-    #fig1 = plot.figure(figsize=(40, 15))
-    #plot.subplot(121)
-    #plot.xlabel('Age')
-    #plot.ylabel('Cost')
-    #age,cost = zip(*points)
-    #plot.scatter(age, cost, c="pink")
-    draw_map()
-    #plot.show()
-    pygame.time.wait(5000)
+ 
+    plot.show()
+    #pygame.time.wait(5000)
 
 
 if flag:
     flag = obstacles_.ValidateAll(goal_pos)
 if flag:
+    global poly1_offset
+    poly1_offset = obstacles_.polygon_with_border
+    global hexa_offset
+    hexa_offset = obstacles_.hexagon_with_border
     StartGame(start_pos,goal_pos,bot_clearance)
-    pygame.quit()
+    #pygame.quit()
     exit()
+
+
 
 
 
