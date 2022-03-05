@@ -8,7 +8,9 @@ To create map and animate the robot motion here, *pygame* is used
 pip install pygame
 ```
 
-[<img src="https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png" width="500" aligh="center"/>](https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png)
+[<img src="https://user-images.githubusercontent.com/13993518/156862357-235bc874-0cd2-4ed1-be02-b5e813e86187.png" width="500" aligh="center"/>](https://user-images.githubusercontent.com/13993518/156862357-235bc874-0cd2-4ed1-be02-b5e813e86187.png)
+
+
 
 > Pygame syntax to generate circle and polygon are as follows:
 ~~~~
@@ -27,5 +29,5 @@ pygame.draw.polygon(surface, color, points)
 
 
 #### References
-1. [Clearance offset calculation](https://stackoverflow.com/a/32773111/5155957)
-2. [Calculate intersection of two lines](https://stackoverflow.com/a/20679579/5155957)
+1. [Clearance offset calculation](https://stackoverflow.com/a/32773111/5155957), [2](https://math.stackexchange.com/a/2594547/979776)
+2. [Calculate intersection of two lines(https://stackoverflow.com/a/20679579/5155957)
