@@ -8,7 +8,8 @@ Planning for a point robot using Dijkstra algorithm
 > Open CV
 
 ### Arena:
-[<img src="https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png" width="500" aligh="center"/>](https://user-images.githubusercontent.com/13993518/155918318-09e236c7-3c42-4aff-9fb0-e4e98eec9dd2.png)
+[<img src="https://user-images.githubusercontent.com/13993518/157596400-3c094d97-9b66-4169-8149-e289485754a6.png" width="500" aligh="center"/>](https://user-images.githubusercontent.com/13993518/157596400-3c094d97-9b66-4169-8149-e289485754a6.png)
+
 
 ### Steps to execute
 ```
